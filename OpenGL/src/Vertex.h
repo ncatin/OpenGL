@@ -1,15 +1,18 @@
 #pragma once
+#include <stdlib.h>
 #include <vector>
 #include <cmath>
+#include "glm/glm.hpp"
 
 namespace Vertex {
 
 	struct Vertex {
 		float x, y, z;
-		float normal[3];
+		float v_normal[3];
 	};
 
-	std::vector<Vertex> GenerateRectVertex(int x_length, int y_length, int n = 1) {
+	std::vector<Vertex> GenerateRectVertex(float x_length = 5, float y_length = 5, float n = 4) {
+		std::cout << "Generating Vertexes " << std::endl;
 		int numVertices = pow(n+1, 2);
 		std::vector<Vertex> vertices;
 		float x_distance = x_length / n; //distance between each vertex on the x-axis
@@ -19,7 +22,7 @@ namespace Vertex {
 				Vertex point;
 				point.x = y * x_distance;
 				point.y = x * y_distance;
-				point.z = 0;
+				point.z = rand() % 5;
 				vertices.push_back(point);
 			}
 		}
@@ -27,28 +30,50 @@ namespace Vertex {
 
 	}
 
-	std::vector<int> CalculateIndices(std::vector<Vertex> vertices, int n) {
-		std::vector<int> Indices;
-		int size = pow(n, 2);
+	std::vector<unsigned int> CalculateIndices(std::vector<Vertex> vertices, int n = 4) {
+		std::cout << "Calculating Indices " << std::endl;
+		std::vector<unsigned int> Indices;
+		int size = pow(n, 2) + n - 1;
 		
 		for (int x = 0; x < size; x++) {
-			if (x % n == 0 && !Indices.empty()) {
-				Indices.push_back(0 + x + 1);
-				Indices.push_back(n + 2 + x);
-				Indices.push_back(2 + x);
-				Indices.push_back(2 + x);
-				Indices.push_back(n + 2 + x);
-				Indices.push_back(n + 3 + x);
+			if ((x+1) % (n+1) == 0 && !Indices.empty()) {
+				continue;
 			}
 			else {
-				Indices.push_back(0+x);
+				Indices.push_back(x);
+				Indices.push_back(n + 2 + x);
 				Indices.push_back(n + 1 + x);
-				Indices.push_back(1 + x);
-				Indices.push_back(1 + x);
-				Indices.push_back(n + 1 + x);
+				Indices.push_back(x);
+				Indices.push_back(x + 1);
 				Indices.push_back(n + 2 + x);
 			}
 		}
+		return Indices;
+	}
+
+	void CalculateNormals(std::vector<Vertex> &vertex, const std::vector<unsigned int>& indices, float n = 4) {
+		std::cout << "Calculating Normals " << std::endl;
+		glm::vec3 p1, p2, p3, normal;
+		for (int x = 0; x < indices.size(); x = x+3) {
+			p1 = glm::vec3(vertex[indices[x]].x, vertex[indices[x]].y, vertex[indices[x]].z);
+			p2 = glm::vec3(vertex[indices[x + 1]].x, vertex[indices[x + 1]].y, vertex[indices[x + 1]].z);
+			p3 = glm::vec3(vertex[indices[x + 2]].x, vertex[indices[x + 2]].y, vertex[indices[x + 2]].z);
+			normal = glm::cross(p2 - p1, p3 - p1);
+
+			vertex[indices[x]].v_normal[0] = normal.x;
+			vertex[indices[x]].v_normal[1] = normal.y;
+			vertex[indices[x]].v_normal[2] = normal.z;
+
+			vertex[indices[x + 1]].v_normal[0] = normal.x;
+			vertex[indices[x + 1]].v_normal[1] = normal.y;
+			vertex[indices[x + 1]].v_normal[2] = normal.z;
+
+			vertex[indices[x + 2]].v_normal[0] = normal.x;
+			vertex[indices[x + 2]].v_normal[1] = normal.y;
+			vertex[indices[x + 2]].v_normal[2] = normal.z;
+
+		}
+		std::cout << "Calculating Normals " << std::endl;
 	}
 
 }
