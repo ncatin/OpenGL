@@ -13,6 +13,8 @@ public:
 	Camera();
 	~Camera();
 
+
+	glm::mat4 getProjection();
 	glm::mat4 getView();
 	glm::vec3 getPosition();
 	void processInput(GLFWwindow* window, float deltaTime);

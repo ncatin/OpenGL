@@ -2,7 +2,7 @@
 
 Camera::Camera():
 	cameraPos(glm::vec3(10.0f, 10.0f, 10.0f)), 
-	cameraFront(glm::vec3(-5.0f, -5.0f, -5.0f)),
+	cameraFront(glm::vec3(0.0f, 0.0f, -5.0f)),
 	cameraUp(glm::vec3(0.0f, 1.0f, 0.0f)),
     yaw(-90.0f), pitch(0.0f), lastX(1280.0f/2.0), lastY(960.0f/2.0f),
     fov(45.0f), firstMouse(true)
@@ -12,6 +12,16 @@ Camera::Camera():
 
 Camera::~Camera()
 {
+}
+
+glm::mat4 Camera::getProjection()
+{
+    return glm::perspective(
+        glm::radians(fov),
+        4.0f/3.0f,
+        0.0f,
+        100.0f
+    );
 }
 
 glm::mat4 Camera::getView()
@@ -50,7 +60,7 @@ void Camera::mouse_callback(GLFWwindow* window, double xpos, double ypos)
     lastX = xpos;
     lastY = ypos;
 
-    float sensitivity = 0.1f;
+    float sensitivity = 0.05f;
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 

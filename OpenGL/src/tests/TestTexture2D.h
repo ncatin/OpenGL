@@ -13,7 +13,7 @@
 namespace test {
 	class TestTexture2D : public Test{
 	public:
-		TestTexture2D();
+		TestTexture2D(GLFWwindow* window);
 		~TestTexture2D();
 
 		void OnUpdate(float deltaTime) override;
@@ -32,7 +32,7 @@ namespace test {
 		GLFWwindow* context;
 
 		glm::mat4 m_Proj, m_View;
-		glm::vec3 m_TranslationA, m_TranslationB;
+		glm::vec3 m_TranslationA;
 		Camera camera;
 		
 	};

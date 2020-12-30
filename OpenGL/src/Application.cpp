@@ -26,10 +26,15 @@
 
 
 
+static float xDimension, yDimension;
+static int numSumdivide;
+
+
 int main(void)
 {
-    GLFWwindow* window;
+    
 
+    GLFWwindow* window;
     /* Initialize the library */
     if (!glfwInit())
         return -1;
@@ -40,6 +45,7 @@ int main(void)
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(1280, 960, "Hello World", NULL, NULL);
+    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwSwapInterval(0);
     if (!window)
@@ -58,6 +64,7 @@ int main(void)
 
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
         GLCall(glEnable(GL_BLEND));
+        
 
         Renderer renderer;
 
@@ -65,30 +72,45 @@ int main(void)
         ImGui_ImplGlfwGL3_Init(window, true);
         ImGui::StyleColorsDark();
 
-
+        //test::TestTexture2D* TerrainTest;
         test::Test* currentTest = nullptr;
-        test::TestMenu* testmenu = new test::TestMenu(currentTest);
-        currentTest = testmenu;
+        //test::TestMenu* testmenu = new test::TestMenu(currentTest);
+        //currentTest = testmenu;
 
-        testmenu->RegisterTest<test::TestClearColor>("Clear Color");
-        testmenu->RegisterTest<test::TestTexture2D>("2D Texture");
+       // testmenu->RegisterTest<test::TestClearColor>("Clear Color");
+        //testmenu->RegisterTest<test::TestTexture2D>("2D Texture");
     
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
         {
-            GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
+            GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f)); 
+            
             /* Render here */
             renderer.Clear();
 
             ImGui_ImplGlfwGL3_NewFrame();
+            
+            ImGui::Begin("Pre-Test");
+            ImGui::InputFloat("input Width", &xDimension, 5.0f, 1000.0f);
+            ImGui::InputFloat("input Height", &yDimension, 5.0f, 1000.0f);
+            ImGui::InputInt("Number of Subdivisions ", &numSumdivide);
+            if (ImGui::Button("Render Terrain")) {
+                currentTest = new test::TestTexture2D(window);
+                
+                std::cout << "Test Created" << std::endl;
+            }
+            ImGui::End();
+
+            
+            
             if (currentTest) {
                 currentTest->OnUpdate(0.0f);
                 currentTest->OnRender(window);
                 currentTest->SetWindow(window);
                 ImGui::Begin("Test");
-                if (currentTest != testmenu && ImGui::Button("<-")) {
+                if (ImGui::Button("<-")) {
                     delete currentTest;
-                    currentTest = testmenu;
+                    //currentTest = testmenu;
                 }
                 currentTest->OnImGuiRender();
                 ImGui::End();
@@ -104,8 +126,8 @@ int main(void)
             GLCall(glfwPollEvents());
         }
         delete currentTest;
-        if (currentTest != testmenu)
-            delete testmenu;
+        /*if (currentTest != testmenu)
+            delete testmenu;*/
     }
     ImGui_ImplGlfwGL3_Shutdown();
     ImGui::DestroyContext();

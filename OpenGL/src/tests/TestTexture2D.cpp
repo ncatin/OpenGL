@@ -11,18 +11,22 @@
 struct MyCallBack {
 	static Camera* cam;
 
-	static void callback(GLFWwindow* window, double a, double b) {
+	static void mouse_callback(GLFWwindow* window, double a, double b) {
 		cam->mouse_callback(window, a, b);
+	}
+
+	static void scroll_callback(GLFWwindow* window, double a, double b) {
+		cam->scroll_callback(window, a, b);
 	}
 };
 
 Camera* MyCallBack::cam = nullptr;
 
+
 namespace test {
 
-	TestTexture2D::TestTexture2D()
-		: m_Proj(glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, 0.0f, 5.0f)),  
-		m_TranslationA(0, 0, 0), m_TranslationB(400, 200, 0)
+	TestTexture2D::TestTexture2D(GLFWwindow* window)
+		: m_TranslationA(0, 0, 0), context(window)
 	{
 
 		/*m_View = glm::lookAt(
@@ -32,26 +36,18 @@ namespace test {
 		);*/
 		
 		MyCallBack::cam = &camera;
-		glfwSetCursorPosCallback(context, &MyCallBack::callback);
-		
-		m_View = camera.getView();
+		glfwSetCursorPosCallback(context, &MyCallBack::mouse_callback);
+		glfwSetScrollCallback(context, &MyCallBack::scroll_callback);
 
+		m_View = camera.getView();
+		m_Proj = camera.getProjection();
+		glMatrixMode(GL_MODELVIEW);
 		std::vector<Vertex::Vertex> positions = Vertex::GenerateRectVertex();
 		std::vector<unsigned int> indices = Vertex::CalculateIndices(positions);
 		Vertex::CalculateNormals(positions, indices);
 
 		std::cout << "Math done " << std::endl;
 
-		/*float positions[] = {
-			-50.f, -50.0f, 50.0f,// 0
-			50.0f, -50.0f, 0.0f,// 1
-			50.0f, 50.0f,  0.0f,//2
-			-50.0f, 50.0f, 0.0f,// 3
-		};*/
-		/*unsigned int indices[] = {
-			0, 1, 2,
-			2, 3, 0
-		};*/
 		GLCall(glEnable(GL_BLEND));
 		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
@@ -69,10 +65,9 @@ namespace test {
 		
 		m_Shader->Bind();
 		m_Shader->SetUniformVec3("u_Color", 1.0f, 1.0f, 1.0f);
-		m_Shader->SetUniformVec3("lightPos", 5.0f, 5.0f, 5.0f);
+		m_Shader->SetUniformVec3("lightPos", camera.getPosition());
 		m_Shader->SetUniformVec3("viewPos", camera.getPosition());
-		m_Texture = std::make_unique<Texture>("res/textures/salem.jpg");
-		//m_Shader->SetUniform1i("u_Texture", 0);
+		
 		
 	}
 
@@ -101,11 +96,13 @@ namespace test {
 			lastFrame = currentFrame;
 			camera.processInput(window, deltaTime);
 			m_View = camera.getView();
-			glm::mat4 model = glm::translate(glm::mat4(1.0f), m_TranslationA);
+			m_Proj = camera.getProjection();
+			glm::mat4 model = glm::mat4(1.0f);
 			glm::mat4 mvp = m_Proj * m_View * model;
 			m_Shader->Bind();
 			m_Shader->SetUniformMat4f("u_MVP", mvp);
 			m_Shader->SetUniformMat4f("u_Model", model);
+			m_Shader->SetUniformVec3("lightPos", camera.getPosition());
 			renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
 		}
 

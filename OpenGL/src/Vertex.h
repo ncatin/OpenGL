@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include "glm/glm.hpp"
+#include "glm/gtc/random.hpp"
 
 namespace Vertex {
 
@@ -22,7 +23,7 @@ namespace Vertex {
 				Vertex point;
 				point.x = y * x_distance;
 				point.y = x * y_distance;
-				point.z = rand() % 5;
+				point.z = 0; //glm::linearRand(-1.0f, 1.0f);
 				vertices.push_back(point);
 			}
 		}
