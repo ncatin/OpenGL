@@ -22,8 +22,9 @@ namespace Vertex {
 			for (int y = 0; y <= n ; y++) {
 				Vertex point;
 				point.x = y * x_distance;
-				point.y = x * y_distance;
-				point.z = 0; //glm::linearRand(-1.0f, 1.0f);
+				point.y = glm::linearRand(-1.0f, 1.0f);
+				point.z = x * y_distance;
+				
 				vertices.push_back(point);
 			}
 		}

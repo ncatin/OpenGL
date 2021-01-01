@@ -25,15 +25,10 @@ Camera* MyCallBack::cam = nullptr;
 
 namespace test {
 
-	TestTexture2D::TestTexture2D(GLFWwindow* window)
-		: m_TranslationA(0, 0, 0), context(window)
+	TestTexture2D::TestTexture2D(GLFWwindow* window, int xLength=5, int zLength=5, int sub=4)
+		:context(window), width(xLength), height(zLength), numDivide(sub)
 	{
 
-		/*m_View = glm::lookAt(
-			glm::vec3(10,10,10),
-			glm::vec3(0,0,0),
-			glm::vec3(0,0,1)
-		);*/
 		
 		MyCallBack::cam = &camera;
 		glfwSetCursorPosCallback(context, &MyCallBack::mouse_callback);
@@ -53,7 +48,7 @@ namespace test {
 
 		m_Shader = std::make_unique<Shader>("res/shaders/Basic.shader");
 		m_VAO = std::make_unique<VertexArray>();
-		m_VertexBuffer = std::make_unique<VertexBuffer>(positions.data(), sizeof(positions));
+		m_VertexBuffer = std::make_unique<VertexBuffer>(positions.data(), positions.size()*sizeof(float)*6);
 		VertexBufferLayout layout;
 		layout.Push<float>(3);
 		layout.Push<float>(3);
@@ -65,7 +60,7 @@ namespace test {
 		
 		m_Shader->Bind();
 		m_Shader->SetUniformVec3("u_Color", 1.0f, 1.0f, 1.0f);
-		m_Shader->SetUniformVec3("lightPos", camera.getPosition());
+		m_Shader->SetUniformVec3("lightPos", 2.5f, 2.5f, 5.0f);
 		m_Shader->SetUniformVec3("viewPos", camera.getPosition());
 		
 		
@@ -116,8 +111,6 @@ namespace test {
 
 	void TestTexture2D::OnImGuiRender()
 	{
-		ImGui::SliderFloat3("Translation A", &m_TranslationA.x, 0.0f, 5.0f);
-		ImGui::SliderFloat3("View", &m_View[0].x, 0.0f, 5.0f);
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	}
 

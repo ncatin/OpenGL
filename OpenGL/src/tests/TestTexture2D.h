@@ -13,7 +13,7 @@
 namespace test {
 	class TestTexture2D : public Test{
 	public:
-		TestTexture2D(GLFWwindow* window);
+		TestTexture2D(GLFWwindow* window, int xLength, int zLength, int sub);
 		~TestTexture2D();
 
 		void OnUpdate(float deltaTime) override;
@@ -23,6 +23,8 @@ namespace test {
 	private:
 		float deltaTime = 0.0f;
 		float lastFrame = 0.0f;
+
+		int width, height, numDivide;
 		
 		std::unique_ptr<VertexArray> m_VAO;
 		std::unique_ptr<IndexBuffer> m_IndexBuffer;

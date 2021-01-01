@@ -95,7 +95,7 @@ int main(void)
             ImGui::InputFloat("input Height", &yDimension, 5.0f, 1000.0f);
             ImGui::InputInt("Number of Subdivisions ", &numSumdivide);
             if (ImGui::Button("Render Terrain")) {
-                currentTest = new test::TestTexture2D(window);
+                currentTest = new test::TestTexture2D(window, xDimension, yDimension, numSumdivide);
                 
                 std::cout << "Test Created" << std::endl;
             }
