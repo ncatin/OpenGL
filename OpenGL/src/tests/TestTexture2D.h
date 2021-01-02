@@ -24,7 +24,8 @@ namespace test {
 		float deltaTime = 0.0f;
 		float lastFrame = 0.0f;
 
-		int width, height, numDivide;
+		float width, height;
+		int numDivide;
 		
 		std::unique_ptr<VertexArray> m_VAO;
 		std::unique_ptr<IndexBuffer> m_IndexBuffer;

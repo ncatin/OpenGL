@@ -37,8 +37,8 @@ namespace test {
 		m_View = camera.getView();
 		m_Proj = camera.getProjection();
 		glMatrixMode(GL_MODELVIEW);
-		std::vector<Vertex::Vertex> positions = Vertex::GenerateRectVertex();
-		std::vector<unsigned int> indices = Vertex::CalculateIndices(positions);
+		std::vector<Vertex::Vertex> positions = Vertex::GenerateRectVertex(width, height, numDivide);
+		std::vector<unsigned int> indices = Vertex::CalculateIndices(positions, numDivide);
 		Vertex::CalculateNormals(positions, indices);
 
 		std::cout << "Math done " << std::endl;
