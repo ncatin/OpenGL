@@ -97,7 +97,7 @@ namespace test {
 			m_Shader->Bind();
 			m_Shader->SetUniformMat4f("u_MVP", mvp);
 			m_Shader->SetUniformMat4f("u_Model", model);
-			m_Shader->SetUniformVec3("lightPos", camera.getPosition());
+			m_Shader->SetUniformVec3("lightPos", width, -250.0f, height);
 			renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
 		}
 
