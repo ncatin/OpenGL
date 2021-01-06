@@ -60,7 +60,7 @@ namespace test {
 		
 		m_Shader->Bind();
 		m_Shader->SetUniformVec3("u_Color", 1.0f, 1.0f, 1.0f);
-		m_Shader->SetUniformVec3("lightPos", 2.5f, 2.5f, 5.0f);
+		m_Shader->SetUniformVec3("lightPos", width, -250.f, height);
 		m_Shader->SetUniformVec3("viewPos", camera.getPosition());
 		
 		
@@ -68,6 +68,7 @@ namespace test {
 
 	TestTexture2D::~TestTexture2D()
 	{
+		std::cout << "Test Deleted" << std::endl;
 	}
 
 	void TestTexture2D::OnUpdate(float deltaTime)

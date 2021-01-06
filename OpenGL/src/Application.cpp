@@ -96,6 +96,10 @@ int main(void)
             ImGui::InputInt("Number of Subdivisions ", &numSumdivide);
             if (numSumdivide == 0) numSumdivide = 5;
             if (ImGui::Button("Render Terrain")) {
+                if (currentTest) {
+                    delete currentTest;
+                    renderer.Clear();
+                }
                 currentTest = new test::TestTexture2D(window, xDimension, yDimension, numSumdivide);
                 
                 std::cout << "Test Created" << std::endl;
@@ -109,10 +113,7 @@ int main(void)
                 currentTest->OnRender(window);
                 currentTest->SetWindow(window);
                 ImGui::Begin("Test");
-                if (ImGui::Button("<-")) {
-                    delete currentTest;
-                    //currentTest = testmenu;
-                }
+           
                 currentTest->OnImGuiRender();
                 ImGui::End();
             }
