@@ -45,7 +45,7 @@ int main(void)
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(1280, 960, "Hello World", NULL, NULL);
-    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    
 
     glfwSwapInterval(0);
     if (!window)
@@ -72,13 +72,9 @@ int main(void)
         ImGui_ImplGlfwGL3_Init(window, true);
         ImGui::StyleColorsDark();
 
-        //test::TestTexture2D* TerrainTest;
+        
         test::Test* currentTest = nullptr;
-        //test::TestMenu* testmenu = new test::TestMenu(currentTest);
-        //currentTest = testmenu;
-
-       // testmenu->RegisterTest<test::TestClearColor>("Clear Color");
-        //testmenu->RegisterTest<test::TestTexture2D>("2D Texture");
+        
     
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
@@ -128,8 +124,7 @@ int main(void)
             GLCall(glfwPollEvents());
         }
         delete currentTest;
-        /*if (currentTest != testmenu)
-            delete testmenu;*/
+        
     }
     ImGui_ImplGlfwGL3_Shutdown();
     ImGui::DestroyContext();

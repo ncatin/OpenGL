@@ -78,4 +78,44 @@ namespace Vertex {
 		std::cout << "Calculating Normals " << std::endl;
 	}
 
+	std::vector<Vertex> GenerateTorusVertex(int radius) {
+		std::cout << "Generating Vertexes " << std::endl;
+		
+		std::vector<Vertex> vertices;
+		
+		for (int x = 0; x < 12; x++) {
+			Vertex point;
+			point.x = radius * 2 * glm::cos(30 * x);
+			point.y = radius * glm::sin(30 * x);
+			point.z = radius * glm::sin(30 * x);
+
+			vertices.push_back(point);
+		}
+
+		return vertices;
+
+	}
+
+	std::vector<unsigned int> CalculateTorusIndices(std::vector<Vertex> vertices, int n = 12) { //Under Construction
+		std::cout << "Calculating Indices " << std::endl;
+		std::vector<unsigned int> Indices;
+		int size = pow(n, 2) + n - 1;
+
+		for (int x = 0; x < size; x++) {
+			if (x % n == 0 && !Indices.empty()) {
+				continue;
+			}
+			else {
+				Indices.push_back(x);
+				Indices.push_back(n + 2 + x);
+				Indices.push_back(n + 1 + x);
+				Indices.push_back(x);
+				Indices.push_back(x + 1);
+				Indices.push_back(n + 2 + x);
+			}
+		}
+		return Indices;
+	}
+
 }
+
