@@ -73,7 +73,7 @@ int main(void)
         ImGui::StyleColorsDark();
 
         
-        test::Test* currentTest = nullptr;
+        test::TestTexture2D* currentTest = nullptr;
         
     
         /* Loop until the user closes the window */
@@ -99,6 +99,11 @@ int main(void)
                 currentTest = new test::TestTexture2D(window, xDimension, yDimension, numSumdivide);
                 
                 std::cout << "Test Created" << std::endl;
+            }
+            if (ImGui::Button("Save Mesh")) {
+                if (currentTest) {
+                    currentTest->SaveMesh();
+                }
             }
             ImGui::End();
 

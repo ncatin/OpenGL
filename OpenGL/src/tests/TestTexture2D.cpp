@@ -1,7 +1,7 @@
 #include "TestTexture2D.h"
 #include "imgui/imgui.h"
 #include "Renderer.h"
-#include "Vertex.h"
+
 
 
 
@@ -37,8 +37,8 @@ namespace test {
 		m_View = camera.getView();
 		m_Proj = camera.getProjection();
 		glMatrixMode(GL_MODELVIEW);
-		std::vector<Vertex::Vertex> positions = Vertex::GenerateRectVertex(width, height, numDivide);
-		std::vector<unsigned int> indices = Vertex::CalculateIndices(positions, numDivide);
+		positions = Vertex::GenerateRectVertex(width, height, numDivide);
+		indices = Vertex::CalculateIndices(positions, numDivide);
 		Vertex::CalculateNormals(positions, indices);
 
 		std::cout << "Math done " << std::endl;
@@ -115,6 +115,23 @@ namespace test {
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	}
 
-	
+	void TestTexture2D::SaveMesh() {
+		std::fstream mesh;
+		mesh.open("Mesh.obj", std::fstream::in, std::fstream::trunc);
+		for (const auto& vertex : positions) {
+			mesh << "v " << vertex.x << " " << vertex.y << " " << vertex.z << '\n';
+		}
+		std::cout << "storing vertices";
+		for (const auto& vertex : positions) {
+			mesh << "vn " << vertex.v_normal[0] << " " << vertex.v_normal[1] << " " << vertex.v_normal[2] << '\n';
+		}
+		std::cout << "storing normals";
+		for (int x = 0; x < indices.size(); x = x + 3) {
+			mesh << "f " << indices[x] + 1 << "//" << indices[x] + 1 << " " << indices[x + 1] + 1 << "//" << indices[x + 1] + 1 << " " << indices[x + 2] + 1 << "//" << indices[x + 2] + 1 << '\n';
+		}
+		std::cout << "storing indices";
+		std::cout << "file saved";
+		mesh.close();
+	}
 
 }

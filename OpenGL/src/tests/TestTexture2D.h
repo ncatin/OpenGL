@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include <GLFW/glfw3.h>
 #include "Camera.h"
+#include "Vertex.h"
 
 #include <memory>
 
@@ -20,6 +21,8 @@ namespace test {
 		void OnRender(GLFWwindow* window) override;
 		void SetWindow(GLFWwindow* window) override;
 		void OnImGuiRender() override;
+
+		void SaveMesh();
 	private:
 		float deltaTime = 0.0f;
 		float lastFrame = 0.0f;
@@ -37,6 +40,9 @@ namespace test {
 		glm::mat4 m_Proj, m_View;
 		glm::vec3 m_TranslationA;
 		Camera camera;
+
+		std::vector<Vertex::Vertex> positions;
+		std::vector<unsigned int> indices;
 		
 	};
 }
